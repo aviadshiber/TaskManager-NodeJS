@@ -4,7 +4,7 @@ const User= require('../models/user')
 const auth = require('../middleware/auth')
 const multer = require('multer')
 const sharp = require('sharp')
-const { sendWelcomeEmail } = require('../emails/account')
+const { sendWelcomeEmail , sendCancellationEmail } = require('../emails/account')
 
 
 const uploadMiddleware = multer({ 
@@ -32,6 +32,7 @@ router.post('/users/me/upload',auth ,uploadMiddleware.single('avatar'), async (r
 
 router.delete('/users/me/upload',auth ,uploadMiddleware.single('avatar'), async (req,res)=>{
     req.user.avatar=undefined
+    sendCancellationEmail(req.user.name,req.user.email)
     await req.user.save()
     res.send()
     // req.file is the `avatar` file
@@ -71,6 +72,7 @@ router.post('/users/login',async (req, res)=>{
         const token = await user.generateAuthToken()
         res.send({user, token})
     }catch(err){
+        console.log(err)
         return res.status(400).send()
     }
 })
