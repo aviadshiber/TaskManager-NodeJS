@@ -1,6 +1,6 @@
 
 # TaskManager-NodeJS
-a simple nodejs app to manage tasks with users.
+a simple API written in Node.js to manage tasks with users.
 The app uses json web token to authenticate the users.
 
 ## Set .env file in root folder:
